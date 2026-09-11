@@ -14,7 +14,7 @@
 				<div class="clear white" style="width: 95%; height: calc(91% * calc(1 - var(--a-ratio))); bottom: calc(2.5% * var(--a-ratio)); left: 2.5%; position: absolute;">hey</div>
 			</div>
 		</div>
-		<div style="width:100%; display: inline;">
+		<div style="width:100%;">
 			<div class="clear white" style="width: 50%; height: 50%;">
 				<button class="clear white" style="width: 10%; height: 50%;"></button>
 			</div>
@@ -22,6 +22,14 @@
 	</div>
 	<button id="bottomBar" class="clear black" style="height:50%; width: 200%; bottom: 0; left: 50%; translate: -50% 90%; position: fixed; --intensity: 10;">
 		<div id = "bottomBarDisplay" style="height: 10%; width: 100%; top: 0%; position: absolute; transition: rotate 0.5s;">^</div>
+		<div style="height: 10%; width: 50%; left: 25%; top: 10%; position: absolute; font-size:medium; display: flex;">
+			<span style="width: 100%">Website made with vanilla JavaScript and HTML</span>
+			<span style="width: 10%">|</span>
+			<span style="width: 100%">Design and implementation by Rowan Vignali</span>
+			<span style="width: 10%">|</span>
+			<span style="width: 100%">Background made using three.js</span>
+			<!-- Website made with vanilla JavaScript and HTML	|	 Design and implementation by Rowan Vignali	|	Background Made With three.js -->
+		</div>
 	</button>
 	</div>
 </div>
@@ -67,7 +75,7 @@
 		if (bBarOpen == true) {
 			bBar.style.translate = "-50% 90%"
 		} else {
-			bBar.style.translate = "-50% 10%"
+			bBar.style.translate = "-50% 80%"
 		}
 
 		bBarOpen = !bBarOpen

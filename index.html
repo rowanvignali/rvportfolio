@@ -11,6 +11,7 @@
 			<div class="clear white" style="--a-ratio: 1/1.6; height: 60%; aspect-ratio: var(--a-ratio);">
 				<button id="name" class="clear black" style="width: 100%; height: 15%; font-weight: bold; --intensity: 10;; --click-color-intensity: 1.2; position: absolute;">Rowan Vignali</button>
 				<img class="clear" src="assets/image.png" style="width: 98%; height: calc(98% * var(--a-ratio)); top: calc(1% * var(--a-ratio)); left: 1%; position: absolute; z-index: -2;">
+				<div class="clear white" style="width: 95%; height: calc(91% * calc(1 - var(--a-ratio))); bottom: calc(2.5% * var(--a-ratio)); left: 2.5%; position: absolute;">hey</div>
 			</div>
 		</div>
 		<div style="width:100%; display: inline;">
@@ -19,8 +20,8 @@
 			</div>
 		</div>
 	</div>
-	<button class="clear black" style="height:10%; width: 200%; bottom: 0; left: 50%; translate: -50% 50%; position: fixed; --intensity: 10;">
-		<div style="height: 50%; width: 100%; top: 0%; transform: translate(0, -50%);">^</div>
+	<button id="bottomBar" class="clear black" style="height:50%; width: 200%; bottom: 0; left: 50%; translate: -50% 90%; position: fixed; --intensity: 10;">
+		<div id = "bottomBarDisplay" style="height: 10%; width: 100%; top: 0%; position: absolute; transition: rotate 0.5s;">^</div>
 	</button>
 	</div>
 </div>
@@ -57,11 +58,31 @@
 		sizeChanged()
 	})
 
+	// Bottom Bar
+	const bBar = document.getElementById("bottomBar")
+	const bBarDisplay = document.getElementById("bottomBarDisplay")
+	var bBarOpen = false
+	var bBarClicks = 0
+	bBar.addEventListener("mousedown", (event) => {
+		if (bBarOpen == true) {
+			bBar.style.translate = "-50% 90%"
+		} else {
+			bBar.style.translate = "-50% 10%"
+		}
+
+		bBarOpen = !bBarOpen
+		bBarClicks++
+		
+		bBarDisplay.style.rotate = `${bBarClicks * 180}deg`
+	})
+
 	// Name Phrases
 	const name = document.getElementById("name")
 	request("assets/namePhrases.json").then((data) => {
 		let index = 0
 		const phrases = data.phrases
+		
+		name.innerHTML = `Rowan Vignali<br><small>${phrases[index++]}</small>`
 
 		name.addEventListener("mousedown", (event) => {
 			name.innerHTML = `Rowan Vignali<br><small>${phrases[index++]}</small>`

@@ -1,6 +1,6 @@
-import {fragmentShader, vertexShader} from "/bgShader.js"
+import {fragmentShader, vertexShader} from "/assets/bgShader.js"
 
-const scene = new THREE.Scene();
+const scene = new THREE.Scene()
 
 const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
 
@@ -29,7 +29,7 @@ scene.add(mesh)
 const clock = new THREE.Clock()
 
 function animate() {
-	requestAnimationFrame(animate);
+	requestAnimationFrame(animate)
 
 	uniforms.u_time.value = clock.getElapsedTime()
 

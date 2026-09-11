@@ -7,16 +7,31 @@
 <script src="/bg.js" type="module"></script>
 <div class="unscroll">
 	<div class="doc">
-		<div class="clear white" style="width: 500%; height: 50%;">
-			<button class="clear white" style="width: 10%; height: 50%;"></div>
+		<div>
+			<div class="clear white" style="--a-ratio: 1/1.6; height: 60%; aspect-ratio: var(--a-ratio);">
+				<button id="name" class="clear black" style="width: 100%; height: 15%; font-weight: bold; --intensity: 10;; --click-color-intensity: 1.2; position: absolute;">Rowan Vignali</button>
+				<img class="clear" src="assets/image.png" style="width: 98%; height: calc(98% * var(--a-ratio)); top: calc(1% * var(--a-ratio)); left: 1%; position: absolute; z-index: -2;">
+			</div>
+		</div>
+		<div style="width:100%; display: inline;">
+			<div class="clear white" style="width: 50%; height: 50%;">
+				<button class="clear white" style="width: 10%; height: 50%;"></button>
+			</div>
 		</div>
 	</div>
+	<button class="clear black" style="height:10%; width: 200%; bottom: 0; left: 50%; translate: -50% 50%; position: fixed; --intensity: 10;">
+		<div style="height: 50%; width: 100%; top: 0%; transform: translate(0, -50%);">^</div>
+	</button>
+	</div>
 </div>
-<script>
+<script type="module">
+	import {request} from "/static.js"
+
+	// Layout Functionality
 	const doc = document.querySelector(".doc")
 	var divPos = 0
 	
-	document.addEventListener('wheel', (event) => {
+	document.addEventListener("wheel", (event) => {
 		if (!event.deltaY) {
 			return
 		}
@@ -26,6 +41,7 @@
 		event.preventDefault()
 	})
 
+	// Style Functionality
 	function sizeChanged() {
 		document.querySelectorAll(".clear").forEach(instance => {
 			let style = window.getComputedStyle(instance)
@@ -37,5 +53,19 @@
 
 	sizeChanged()
 
-	document.addEventListener("resize", sizeChanged)
+	window.addEventListener("resize", () => {
+		sizeChanged()
+	})
+
+	// Name Phrases
+	const name = document.getElementById("name")
+	request("assets/namePhrases.json").then((data) => {
+		let index = 0
+		const phrases = data.phrases
+
+		name.addEventListener("mousedown", (event) => {
+			name.innerHTML = `Rowan Vignali<br><small>${phrases[index++]}</small>`
+			index %= phrases.length
+		})
+	})
 </script>

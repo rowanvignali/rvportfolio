@@ -4,33 +4,47 @@
 	<title>Rowan Vignali Portfolio</title>
 </head>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
 <script src="/bg.js" type="module"></script>
 <div class="unscroll">
 	<div class="doc">
 		<div>
-			<div class="clear white" style="--a-ratio: 1/1.6; height: 60%; aspect-ratio: var(--a-ratio);">
-				<button id="name" class="clear black" style="width: 100%; height: 15%; font-weight: bold; --intensity: 10;; --click-color-intensity: 1.2; position: absolute;">Rowan Vignali</button>
-				<img class="clear" src="assets/image.png" style="width: 98%; height: calc(98% * var(--a-ratio)); top: calc(1% * var(--a-ratio)); left: 1%; position: absolute; z-index: -2;">
-				<div class="clear white" style="width: 95%; height: calc(91% * calc(1 - var(--a-ratio))); bottom: calc(2.5% * var(--a-ratio)); left: 2.5%; position: absolute;">hey</div>
+			<div class="clear white" style="--a-ratio: 1/2.6; height: 100%; aspect-ratio: var(--a-ratio);">
+				<button id="name" class="clear black" style="font-size: x-large; width: 100%; height: 10%; font-weight: bold; --intensity: 10;; --click-color-intensity: 1.2; position: absolute;">Rowan Vignali</button>
+				<img src="assets/image.png" style="border-radius: 1rem; width: 96%; height: calc(96% * var(--a-ratio)); top: calc(2% * var(--a-ratio)); left: 2%; position: absolute; z-index: -2;">
+				<div class="clear black" style="text-align:center; padding: 10px; box-sizing: border-box; width: 95%; height: calc(98% * (1 - var(--a-ratio))); bottom: calc(2.5% * var(--a-ratio)); left: 2.5%; position: absolute;">
+					<aboutHeader style="margin-top: 0px;">The Ohio State University</aboutHeader>
+					<about>2026-2029</about>
+					<aboutHeader>Programs</aboutHeader>
+					<about>Computer Science (Major)</about>
+					<about>Math (Minor)</about>
+					<about>Geographical Information Science (Minor)</about>
+					<aboutHeader>Current GPA</aboutHeader>
+					<about>3.894</about>
+				</div>
+				<!-- <div class="clear black" style="width: 96%; aspect-ratio: 663/104; bottom: 0; position: absolute;">
+					<img src="https://ghchart.rshah.org/93CFFB/rowanvignali" style="width: 100%;">
+				</div> -->
 			</div>
 		</div>
-		<div style="width:100%;">
-			<div class="clear white" style="width: 50%; height: 50%;">
-				<button class="clear white" style="width: 10%; height: 50%;"></button>
-			</div>
+		<padding></padding>
+		<div>
+			<div class="clear white" style="height: 100%; aspect-ratio: 1.5; display: flex; flex-direction: row; flex-wrap: wrap;" id="projects"></div>
 		</div>
 	</div>
-	<button id="bottomBar" class="clear black" style="height:50%; width: 200%; bottom: 0; left: 50%; translate: -50% 90%; position: fixed; --intensity: 10;">
-		<div id = "bottomBarDisplay" style="height: 10%; width: 100%; top: 0%; position: absolute; transition: rotate 0.5s;">^</div>
+	<button id="bottomBar" class="clear black" style="height:50%; width: 200%; bottom: 0; left: 50%; translate: -50% 92%; position: fixed; --intensity: 10; z-index: 1;">
+		<div id = "bottomBarDisplay" style="height: 10%; width: 100%; top: 0%; position: absolute; transition: rotate 0.5s; font-size: x-large;">^</div>
 		<div style="height: 10%; width: 50%; left: 25%; top: 10%; position: absolute; font-size:medium; display: flex;">
-			<span style="width: 100%">Website made with vanilla JavaScript and HTML</span>
+			<span style="width: 100%">Website made with JavaScript and HTML by Rowan Vignali</span>
 			<span style="width: 10%">|</span>
-			<span style="width: 100%">Design and implementation by Rowan Vignali</span>
+			<span style="width: 100%">Readme formatting using <a href="https://github.com/showdownjs/showdown">showdown</a></span>
 			<span style="width: 10%">|</span>
-			<span style="width: 100%">Background made using three.js</span>
-			<!-- Website made with vanilla JavaScript and HTML	|	 Design and implementation by Rowan Vignali	|	Background Made With three.js -->
+			<span style="width: 100%">Background made using Three.js</span>
 		</div>
 	</button>
+	<div id="topBar" class="clear black" style="height: 10%; width: 200%; top: 0; left: 50%; translate: -50% -50%; position: fixed; --intensity: 16; z-index: -1;">
+		<div id="labels" style="bottom: 0%; width: 50%; left:25%; position: fixed;"><label class="clear white">About</label></div>
+	</div>
 	</div>
 </div>
 <script type="module">
@@ -50,13 +64,17 @@
 		event.preventDefault()
 	})
 
+	function updateSize(instance) {
+		let style = window.getComputedStyle(instance)
+
+		instance.style.setProperty("--xScale", 1 / parseInt(style.width))
+		instance.style.setProperty("--yScale", 1 / parseInt(style.height))
+	}
+
 	// Style Functionality
 	function sizeChanged() {
 		document.querySelectorAll(".clear").forEach(instance => {
-			let style = window.getComputedStyle(instance)
-
-			instance.style.setProperty("--xScale", 1 / parseInt(style.width))
-			instance.style.setProperty("--yScale", 1 / parseInt(style.height))
+			updateSize(instance)
 		})
 	}
 
@@ -66,6 +84,92 @@
 		sizeChanged()
 	})
 
+	// Projects
+	const projects = document.getElementById("projects")
+	request("https://api.github.com/users/rowanvignali/repos").then(data => {
+		var readmeConverter = new showdown.Converter()
+
+		data.forEach(async projectData => {
+			let div = document.createElement("div")
+			div.className = "clear white project13"
+
+			let gitButton = document.createElement("button")
+			gitButton.className = "clear black projectButton"
+
+			gitButton.addEventListener("mousedown", (event) => {
+				window.open(projectData.html_url, "_blank")
+			})
+
+			let gitName = document.createElement("div")
+			gitName.className = "clear black projectName"
+			gitName.innerText = projectData.full_name
+
+			let gitLogo = document.createElement("img")
+			gitLogo.style.width = "100%"
+			gitLogo.style.height = "100%"
+			gitLogo.src = "assets/githubInvertocatLogo.svg"
+			gitLogo.draggable = false
+
+			gitButton.append(gitLogo)
+
+			let readme = document.createElement("div")
+			readme.className = "clear black projectReadme"
+
+			let readmePre = document.createElement("span")
+			readmePre.style.margin = 0
+
+			readme.append(readmePre)
+
+			let commits = document.createElement("div")
+			commits.className = "clear black projectCommits"
+
+			let commitList = []
+
+			for (let index = 0; index < 10; index++) {
+				let ci = document.createElement("commitInstance")
+				ci.className = "clear black"
+
+				commitList.push(ci)
+				commits.append(ci)
+			}
+			
+			const commitData = await request(`https://api.github.com/repos/${projectData.full_name}/commits?per_page=10`)
+
+			console.log(commitData)
+			
+			let index = 0
+			commitData.forEach(commit => {
+				commitList[index].className += " filled"
+
+				let hour = parseInt(commit.commit.author.date.substring(11, 13))
+				let time = String(hour % 12) + commit.commit.author.date.substring(13, 16)
+				let affix = " AM"
+
+				if (hour > 12) {
+					affix = " PM"
+				}
+
+				let hover = document.createElement("div")
+				hover.className = "clear black commitHover"
+				hover.innerHTML = `<date>[ ${commit.commit.author.date.substring(0, 10)} at ${time + affix} ]</date><br>${commit.commit.message}`
+
+				commitList[index].append(hover)
+				
+				index++
+			})
+
+			const readmeData = await request(`https://api.github.com/repos/${projectData.full_name}/readme`)
+			readmePre.innerHTML = readmeConverter.makeHtml(atob(readmeData.content))
+
+			div.append(gitButton, gitName, commits, readme)
+
+			projects.append(div)
+
+			updateSize(div)
+			updateSize(gitButton)
+		})
+	})
+
 	// Bottom Bar
 	const bBar = document.getElementById("bottomBar")
 	const bBarDisplay = document.getElementById("bottomBarDisplay")
@@ -73,7 +177,7 @@
 	var bBarClicks = 0
 	bBar.addEventListener("mousedown", (event) => {
 		if (bBarOpen == true) {
-			bBar.style.translate = "-50% 90%"
+			bBar.style.translate = "-50% 92%"
 		} else {
 			bBar.style.translate = "-50% 80%"
 		}

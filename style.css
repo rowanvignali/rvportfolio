@@ -99,6 +99,8 @@ label {
 	border-width: 1px;
 	box-shadow:0px 0px 30px rgba(0, 0, 0, 0.25);
 	transition: translate 1s var(--circular-out), scale 0.3s var(--circular-out), background-color 0.5s;
+	scrollbar-width: thin;
+	scrollbar-color: var(--white) rgba(0, 0, 0, 0);
 }
 
 button.clear {

@@ -48,7 +48,7 @@
 	</div>
 </div>
 <script type="module">
-	import {request} from "/static.js"
+	import {request, saveRequest} from "/static.js"
 
 	// Layout Functionality
 	const doc = document.querySelector(".doc")
@@ -86,7 +86,17 @@
 
 	// Projects
 	const projects = document.getElementById("projects")
-	request("https://api.github.com/users/rowanvignali/repos").then(data => {
+	request("https://api.github.com/users/rowanvignali/repos", "repos").then(data => {
+		var repoData = []
+
+		for (let index = 0; index < data.length; index++) {
+			repoData.push({
+				name: data[index].name
+			})
+		}
+
+		saveRequest("repos", repoData)
+
 		var readmeConverter = new showdown.Converter()
 
 		data.forEach(async projectData => {
@@ -97,12 +107,12 @@
 			gitButton.className = "clear black projectButton"
 
 			gitButton.addEventListener("mousedown", (event) => {
-				window.open(projectData.html_url, "_blank")
+				window.open("https://github.com/rowanvignali/" + projectData.name, "_blank")
 			})
 
 			let gitName = document.createElement("div")
 			gitName.className = "clear black projectName"
-			gitName.innerText = projectData.full_name
+			gitName.innerText = "rowanvignali/" + projectData.name
 
 			let gitLogo = document.createElement("img")
 			gitLogo.style.width = "100%"
@@ -114,6 +124,14 @@
 
 			let readme = document.createElement("div")
 			readme.className = "clear black projectReadme"
+			readme.style.overflowX = "hidden"
+			readme.style.overflowY = "scroll"
+
+			readme.addEventListener("wheel", (event) => {
+				if (readme.scrollHeight > readme.clientHeight) {
+					event.stopImmediatePropagation()
+				}
+			})
 
 			let readmePre = document.createElement("span")
 			readmePre.style.margin = 0
@@ -133,33 +151,41 @@
 				commits.append(ci)
 			}
 			
-			const commitData = await request(`https://api.github.com/repos/${projectData.full_name}/commits?per_page=10`)
+			try {
+				const readmeData = await request(`https://api.github.com/repos/rowanvignali/${projectData.name}/readme`, `${projectData.name}_readme`)
+				readmePre.innerHTML = readmeConverter.makeHtml(atob(readmeData.content))
 
-			console.log(commitData)
-			
-			let index = 0
-			commitData.forEach(commit => {
-				commitList[index].className += " filled"
+				saveRequest(`${projectData.name}_readme`, {content: readmeData.content})
+			} catch {
+				readmePre.innerHTML = "<h5>Error loading readme</h5>"
+			}
 
-				let hour = parseInt(commit.commit.author.date.substring(11, 13))
-				let time = String(hour % 12) + commit.commit.author.date.substring(13, 16)
-				let affix = " AM"
-
-				if (hour > 12) {
-					affix = " PM"
-				}
-
-				let hover = document.createElement("div")
-				hover.className = "clear black commitHover"
-				hover.innerHTML = `<date>[ ${commit.commit.author.date.substring(0, 10)} at ${time + affix} ]</date><br>${commit.commit.message}`
-
-				commitList[index].append(hover)
+			try {
+				const commitData = await request(`https://api.github.com/repos/rowanvignali/${projectData.name}/commits?per_page=10`)
 				
-				index++
-			})
+				let index = 0
+				commitData.forEach(commit => {
+					commitList[index].className += " filled"
 
-			const readmeData = await request(`https://api.github.com/repos/${projectData.full_name}/readme`)
-			readmePre.innerHTML = readmeConverter.makeHtml(atob(readmeData.content))
+					let hour = parseInt(commit.commit.author.date.substring(11, 13))
+					let time = String(hour % 12) + commit.commit.author.date.substring(13, 16)
+					let affix = " AM"
+
+					if (hour > 12) {
+						affix = " PM"
+					}
+
+					let hover = document.createElement("div")
+					hover.className = "clear black commitHover"
+					hover.innerHTML = `<date>[ ${commit.commit.author.date.substring(0, 10)} at ${time + affix} ]</date><br>${commit.commit.message}`
+
+					commitList[index].append(hover)
+					
+					index++
+				})
+			} catch {
+				console.log("Error loading commits: Rate limited")
+			}
 
 			div.append(gitButton, gitName, commits, readme)
 

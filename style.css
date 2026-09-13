@@ -103,6 +103,15 @@ label {
 	scrollbar-color: var(--white) rgba(0, 0, 0, 0);
 }
 
+a {
+	color: var(--accent-color);
+	transition: color 0.3s;
+}
+
+a:hover {
+	color: var(--accent-color2);
+}
+
 button.clear {
 	--hover-intensity: 16;
 	--click-intensity: 48;

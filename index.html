@@ -8,7 +8,7 @@
 <script src="/bg.js" type="module"></script>
 <div class="unscroll">
 	<div class="doc">
-		<div>
+		<div id="aboutSection">
 			<div class="clear white" style="--a-ratio: 1/2.6; height: 100%; aspect-ratio: var(--a-ratio);">
 				<button id="name" class="clear black" style="font-size: x-large; width: 100%; height: 10%; font-weight: bold; --intensity: 10;; --click-color-intensity: 1.2; position: absolute;">Rowan Vignali</button>
 				<img src="assets/image.png" style="border-radius: 1rem; width: 96%; height: calc(96% * var(--a-ratio)); top: calc(2% * var(--a-ratio)); left: 2%; position: absolute; z-index: -2;">
@@ -20,7 +20,7 @@
 					<about>Math (Minor)</about>
 					<about>Geographical Information Science (Minor)</about>
 					<aboutHeader>Current GPA</aboutHeader>
-					<about>3.894</about>
+					<about>3.896</about>
 				</div>
 				<!-- <div class="clear black" style="width: 96%; aspect-ratio: 663/104; bottom: 0; position: absolute;">
 					<img src="https://ghchart.rshah.org/93CFFB/rowanvignali" style="width: 100%;">
@@ -28,7 +28,11 @@
 			</div>
 		</div>
 		<padding></padding>
-		<div>
+		<div id="projectsSection">
+			<div class="clear white" style="height: 100%; aspect-ratio: 1.5; display: flex; flex-direction: row; flex-wrap: wrap;" id="projects"></div>
+		</div>
+		<padding></padding>
+		<div id="experienceSection">
 			<div class="clear white" style="height: 100%; aspect-ratio: 1.5; display: flex; flex-direction: row; flex-wrap: wrap;" id="projects"></div>
 		</div>
 	</div>
@@ -39,29 +43,78 @@
 			<span style="width: 10%">|</span>
 			<span style="width: 100%">Readme formatting using <a href="https://github.com/showdownjs/showdown">showdown</a></span>
 			<span style="width: 10%">|</span>
-			<span style="width: 100%">Background made using Three.js</span>
+			<span style="width: 100%">Background made using <a href="https://threejs.org/">Three.js</a></span>
 		</div>
 	</button>
 	<div id="topBar" class="clear black" style="height: 10%; width: 200%; top: 0; left: 50%; translate: -50% -50%; position: fixed; --intensity: 16; z-index: -1;">
-		<div id="labels" style="bottom: 0%; width: 50%; left:25%; position: fixed;"><label class="clear white">About</label></div>
+		<div id="labels" style="bottom: 0%; width: 50%; left:25%; position: fixed;"></div>
 	</div>
 	</div>
 </div>
 <script type="module">
-	import {request, saveRequest} from "/static.js"
+	import {request, saveRequest, clamp} from "/static.js"
+
+	const sections = {
+		About: document.getElementById("aboutSection"),
+		Projects: document.getElementById("projectsSection"),
+		Experience: document.getElementById("experienceSection")
+	}
+
+	// Top Bar
+	const tBar = document.getElementById("topBar")
+	const labels = document.getElementById("labels")
+	var sectionList = []
+	for (let [name, section] of Object.entries(sections)) {
+		let instance = document.createElement("label")
+		instance.className = "clear white"
+		instance.innerText = name
+		instance.style.left = `${section.getBoundingClientRect().left}px`
+
+		labels.append(instance)
+
+		updateSize(instance)
+
+		sectionList.push([instance, section])
+	}
 
 	// Layout Functionality
 	const doc = document.querySelector(".doc")
 	var divPos = 0
+	var scrollIndex = 0
+	var scrollStart = 0
+
+	function animateTopBar(initialIndex) {
+		sectionList.forEach((data) => {
+			let rect = data[1].getBoundingClientRect()
+
+			console.log(rect.right > 0)
+
+			if (rect.right > 0 && rect.left < 0) {
+				data[0].style.left = 0
+			} else {
+				data[0].style.left = `${rect.left}px`
+			}
+		})
+
+		if (scrollIndex == initialIndex && Date.now() - scrollStart <= 500) {
+			requestAnimationFrame(() => {
+				animateTopBar(initialIndex)
+			})
+		}
+	}
 	
 	document.addEventListener("wheel", (event) => {
 		if (!event.deltaY) {
 			return
 		}
 
-		divPos = Math.min(Math.max(divPos - event.deltaY - event.deltaX, window.innerWidth - doc.scrollWidth), 0)
+		divPos = Math.min(Math.max(divPos - (event.deltaY + event.deltaX), window.innerWidth - doc.scrollWidth), 0)
 		doc.style.translate = `${divPos}px`
 		event.preventDefault()
+
+		scrollIndex++
+		scrollStart = Date.now()
+		animateTopBar(scrollIndex)
 	})
 
 	function updateSize(instance) {
@@ -75,6 +128,7 @@
 	function sizeChanged() {
 		document.querySelectorAll(".clear").forEach(instance => {
 			updateSize(instance)
+			animateTopBar()
 		})
 	}
 
@@ -202,16 +256,18 @@
 	var bBarOpen = false
 	var bBarClicks = 0
 	bBar.addEventListener("mousedown", (event) => {
-		if (bBarOpen == true) {
-			bBar.style.translate = "-50% 92%"
-		} else {
-			bBar.style.translate = "-50% 80%"
-		}
+		if (event.target.tagName.toLowerCase() != "a") {
+			if (bBarOpen == true) {
+				bBar.style.translate = "-50% 92%"
+			} else {
+				bBar.style.translate = "-50% 80%"
+			}
 
-		bBarOpen = !bBarOpen
-		bBarClicks++
-		
-		bBarDisplay.style.rotate = `${bBarClicks * 180}deg`
+			bBarOpen = !bBarOpen
+			bBarClicks++
+			
+			bBarDisplay.style.rotate = `${bBarClicks * 180}deg`
+		}
 	})
 
 	// Name Phrases

@@ -21,3 +21,7 @@ export function saveRequest(alias, data) {
 	date.setTime(date.getTime() + 60 * 60 * 1000)
 	document.cookie = alias + "=" + JSON.stringify(data) + ";" + "expires=" + date.toUTCString() + ";path=/"
 }
+
+export function clamp(x, min, max) {
+	return Math.max(Math.min(x, max), min)
+}

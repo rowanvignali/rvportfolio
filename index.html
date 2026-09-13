@@ -22,9 +22,6 @@
 					<aboutHeader>Current GPA</aboutHeader>
 					<about>3.896</about>
 				</div>
-				<!-- <div class="clear black" style="width: 96%; aspect-ratio: 663/104; bottom: 0; position: absolute;">
-					<img src="https://ghchart.rshah.org/93CFFB/rowanvignali" style="width: 100%;">
-				</div> -->
 			</div>
 		</div>
 		<padding></padding>
@@ -86,8 +83,6 @@
 	function animateTopBar(initialIndex) {
 		sectionList.forEach((data) => {
 			let rect = data[1].getBoundingClientRect()
-
-			console.log(rect.right > 0)
 
 			if (rect.right > 0 && rect.left < 0) {
 				data[0].style.left = 0
@@ -241,7 +236,10 @@
 				console.log("Error loading commits: Rate limited")
 			}
 
-			div.append(gitButton, gitName, commits, readme)
+			let popInAnimation = document.createElement("div")
+			popInAnimation.className = "popIn"
+
+			div.append(gitButton, gitName, commits, readme, popInAnimation)
 
 			projects.append(div)
 

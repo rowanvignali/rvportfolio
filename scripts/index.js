@@ -164,7 +164,7 @@ request("assets/portfolioData/projectRedirects.json").then((projectRedirects) =>
 		var readmeConverter = new showdown.Converter()
 
 		data.forEach(async projectData => {
-			let project = createProject("rowanvignali/" + projectData.name)
+			let project = createProject("rowanvignali/" + projectData.name.toLowerCase())
 			let readme = project.querySelector(".projectReadme")
 			createProjectButton(project, "https://github.com/rowanvignali/" + projectData.name, "assets/images/githubInvertocatLogo.svg")
 

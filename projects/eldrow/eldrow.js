@@ -4,9 +4,10 @@ var xmlHttp = new XMLHttpRequest()
 xmlHttp.open("GET", LINK, false)
 xmlHttp.send()
 
-import letterValue from '/projects/eldrow/letterValue.json' with { type: 'json' }
+import letterValue from '/projects/eldrow/assets/letterValue.json' with { type: 'json' }
 
 export const words = xmlHttp.responseText.split("\n")
+const letters = "abcdefghijklmnopqrstuvwxyz".split("")
 
 const scoreValues = [
 	["words", 20, 30, "correct"],
@@ -26,10 +27,90 @@ const inputRow = document.createElement("div")
 inputRow.className = "gameRow inputRow"
 board.appendChild(inputRow)
 
+export function calculateDifficulty(word, accuracy) {
+	let difficulty = 0
+	let multiplier = 1
+
+	let repeatList = []
+
+	for (let index = 0; index < 5; index++) {
+		let character = word.charAt(index)
+
+		switch(accuracy[index]) {
+			case 0:
+				difficulty += Math.ceil(50 / letterValue[character])
+				break
+			case 1:
+				multiplier *= 1.3
+
+				if (!repeatList.includes(character)) {
+					difficulty += 2 + 2 * letterValue[character]
+				} else {
+					difficulty += 6 + 3 * letterValue[character]
+				}
+			case 2:
+				multiplier *= 1.3
+
+				if (!repeatList.includes(character)) {
+					difficulty += 2 + letterValue[character]
+				} else {
+					difficulty += 6 + 2 * letterValue[character]
+				}
+		}
+
+		repeatList.push(character)
+	}
+	
+	return Math.ceil(difficulty * multiplier)
+}
+
+function chooseLetter(min, max) {
+	while (true) {
+		let letter = letters[Math.floor(Math.random() * letters.length)]
+
+		if (letterValue[letter] >= min && letterValue[letter] <= max) {
+			return letter
+		}
+	}
+}
+
+export function generateWord(properties) {
+	let value = properties.letterRange[0] + Math.round(Math.pow(Math.random(), properties.letterPower) * (properties.letterRange[1] - properties.letterRange[0]))
+	let word = []
+	let accuracy = []
+	let availableIndex = [0, 1, 2, 3, 4]
+
+	for (let index = 0; index < 5; index++) {
+		word[index] = chooseLetter(properties.minIncorrectValue, properties.maxIncorrectValue)
+		accuracy[index] = 0
+	}
+	
+	while (value > 0){
+		let i = Math.floor(Math.random() * availableIndex.length)
+		let index = availableIndex[i]
+		availableIndex.splice(i, 1)
+
+		if (Math.random() < properties.correctChance) {
+			// Correct
+			word[index] = chooseLetter(properties.minCorrectValue, properties.maxCorrectValue)
+			accuracy[index] = 2
+			value -= 2
+		} else {
+			// Present
+			word[index] = chooseLetter(properties.minPresentValue, properties.maxPresentValue)
+			accuracy[index] = 1
+			value -= 1
+		}
+	}
+
+	return [word.join(""), accuracy]
+}
+
 export class Eldrow {
 	constructor(word, accuracy) {
 		this.word = word
 
+		this.accuracy = accuracy
 		this.correctLetters = []
 		this.presentLetters = []
 		this.presentLetterCount = {}
@@ -40,7 +121,7 @@ export class Eldrow {
 		let characters = word.split("")
 		let index = 0
 
-		accuracy.forEach(value => {
+		this.accuracy.forEach(value => {
 			let character = characters[index]
 
 			let element = document.createElement("div")
@@ -125,7 +206,7 @@ export class Eldrow {
 			this.startTimer(60)
 		}, 2500)
 
-		this.calculateDifficulty()
+		this.difficulty = calculateDifficulty(this.word, this.accuracy)
 	}
 
 	applies(word) {
@@ -472,46 +553,6 @@ export class Eldrow {
 			div.className = "gameElement mainRowElement"
 			div.classList.add(color)
 		})
-	}
-
-	calculateDifficulty() {
-		this.difficulty = 0
-
-		let multiplier = 1
-
-		let repeatList = []
-
-		for (let index = 0; index < 5; index++) {
-			let character = this.word.charAt(index)
-
-			if (this.incorrectLetters[index]) {
-				if (!repeatList.includes(character)) {
-					this.difficulty += Math.ceil(50 / letterValue[character])
-				}
-			} else if (this.correctLetters[index]) {
-				multiplier *= 1.3
-
-				if (!repeatList.includes(character)) {
-					this.difficulty += 2 + letterValue[character]
-				} else {
-					this.difficulty += 6 + 2 * letterValue[character]
-				}
-			} else if (this.presentLetters[index]) {
-				multiplier *= 1.2
-
-				if (!repeatList.includes(character)) {
-					this.difficulty += 2 + 2 * letterValue[character]
-				} else {
-					this.difficulty += 6 + 3 * letterValue[character]
-				}
-			}
-
-			repeatList.push(character)
-		}
-		
-		this.difficulty = Math.ceil(this.difficulty * multiplier)
-
-		console.log(this.difficulty)
 	}
 }
 

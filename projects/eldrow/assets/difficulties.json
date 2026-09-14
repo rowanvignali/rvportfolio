@@ -1,0 +1,13 @@
+{
+	"Easy": {
+		"correctChance": 0.4,
+		"letterRange": [1, 2],
+		"letterPower": 1.4,
+		"minIncorrectValue": 22,
+		"maxIncorrectValue": 25,
+		"minCorrectValue": 0,
+		"maxCorrectValue": 8,
+		"minPresentValue": 0,
+		"maxPresentValue": 10
+	}
+}

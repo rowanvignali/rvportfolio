@@ -53,6 +53,24 @@ html {
 	background-color: var(--primary);
 }
 
+.imageRow {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	height: 50%;
+	width: calc(600% / 5);
+
+	text-align: center;
+	font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+	font-weight: bold;
+	font-size: 2vw;
+	overflow: hidden;
+	position: absolute;
+	transform: translate(-50%, 0);
+	left: 50%;
+
+	background-color: var(--primary);
+}
+
 .gameElement {
 	width: 80%;
 	height: 80%;
@@ -77,6 +95,7 @@ html {
 	animation-duration: 2s;
 	animation-fill-mode: forwards;
 	animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+	height: auto;
 }
 
 @keyframes mainRowElementIn {
@@ -160,7 +179,6 @@ html {
 
 .gameTextElement {
 	width: 100%;
-	height: 100%;
 	margin-left: 50%;
 	display: block;
 	position: absolute;

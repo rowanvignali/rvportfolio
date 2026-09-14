@@ -1,4 +1,4 @@
-import {request, saveRequest, clamp} from "/static.js"
+import {request, saveRequest, clamp} from "/scripts/static.js"
 
 const sections = {
 	About: document.getElementById("aboutSection"),

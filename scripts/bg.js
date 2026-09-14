@@ -1,4 +1,4 @@
-import {fragmentShader, vertexShader} from "/assets/bgShader.js"
+import {fragmentShader, vertexShader} from "/assets/shaders/bgShader.js"
 
 const scene = new THREE.Scene()
 

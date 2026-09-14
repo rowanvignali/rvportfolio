@@ -1,0 +1,346 @@
+:root {
+	--text: #f8f8f8;
+	--primary: #121213;
+	--accent: hsl(from var(--primary) h s 25%);
+	--accent2: hsl(from var(--primary) h s 10%);
+
+	--already-guessed: #974bd1;
+	--correct: #538d4e;
+	--present: #b59f3b;
+	--incorrect: #3a3a3c;
+	--ultra-incorrect: #d44444;
+
+	--ready: #dc6446;
+	--set: #dc9646;
+	--go: #48dc46;
+}
+
+html {
+	background-color: var(--primary);
+}
+
+.gameContainer {
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	display: inline-grid;
+	position: absolute;
+	grid-template-rows: repeat(2, 1fr);
+	aspect-ratio: 5/2;
+	width: 30%;
+
+	animation-name: gameContainerIn;
+	animation-duration: 2s;
+}
+
+@keyframes gameContainerIn {
+	0% {transform: translate(-50%, -25%)}
+	50% {transform: translate(-50%, -25%)}
+	100% {transform: translate(-50%, -50%)}
+}
+
+.gameRow {
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+	height: 100%;
+
+	text-align: center;
+	font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+	font-weight: bold;
+	font-size: 2vw;
+	overflow: hidden;
+
+	background-color: var(--primary);
+}
+
+.gameElement {
+	width: 80%;
+	height: 80%;
+	margin-top: 50%;
+	margin-left: 50%;
+	transform: translate(-50%, -50%);
+	overflow: hidden;
+	align-content: center;
+
+	border-width: .3vw;
+	border-style: solid;
+
+	color: var(--text);
+	border-color: var(--accent);
+	background-color: var(--accent2);
+}
+
+.gameElement.mainRowElement {
+	opacity: 0;
+
+	animation-name: mainRowElementIn;
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+	animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+@keyframes mainRowElementIn {
+	0% {opacity: 0; margin-top: 0%; transform: translate(-50%, -50%) rotate3d(1, 0, 0, 180deg); width: 100%; height: 100%}
+	50% {opacity: 1; margin-top: 50%; transform: translate(-50%, -50%) rotate(0deg)}
+	100% {opacity: 1; width: 80%; height: 80%}
+}
+
+.gameElement.inputRowElement {
+	opacity: 0;
+
+	animation-name: inputRowElementIn;
+	animation-duration: 2s;
+	animation-fill-mode: forwards;
+}
+
+@keyframes inputRowElementIn {
+	0% {opacity: 0}
+	50% {opacity: 0}
+	100% {opacity: 1}
+}
+
+.inputRowOut {
+	animation-name: inputRowOut !important;
+	animation-duration: .4s !important;
+	animation-fill-mode: forwards !important;
+	animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+@keyframes inputRowOut {
+	from {}
+	to {transform: translate(0%, -50%) rotate3d(1, 0, 0, 90deg)}
+}
+
+.gameContainerOut {
+	animation-name: gameContainerOut !important;
+	animation-duration: .6s !important;
+	animation-fill-mode: forwards !important;
+	animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+@keyframes gameContainerOut {
+	from {}
+	to {transform: translate(-50%, -100%)}
+}
+
+.correct {
+	border-color: var(--correct) !important;
+	background-color: var(--correct) !important;
+}
+
+.correctBorder {
+	border-color: var(--correct) !important;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.present {
+	border-color: var(--present) !important;
+	background-color: var(--present) !important;
+}
+
+.presentBorder {
+	border-color: var(--present) !important;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.incorrect {
+	border-color: var(--incorrect) !important;
+	background-color: var(--incorrect) !important;
+}
+
+.incorrectBorder {
+	border-color: var(--incorrect) !important;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.guessedBorder {
+	border-color: var(--already-guessed) !important;
+	background-color: rgba(0, 0, 0, 0);
+}
+
+.gameTextElement {
+	width: 100%;
+	height: 100%;
+	margin-left: 50%;
+	display: block;
+	position: absolute;
+	transform: translate(-50%, -50%);
+	text-align: center;
+	align-content: center;
+	font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+	font-weight: bold;
+	font-size: 2vw;
+	overflow: hidden;
+}
+
+.correctEffect {
+	width: 100%;
+	height: 100%;
+	display: block;
+	position: absolute;
+	margin-left: 50%;
+	transform: translate(-50%, -50%);
+	align-content: center;
+
+	border-width: .3vw;
+	border-style: solid;
+
+	color: var(--text);
+	border-color: var(--correct);
+	background-color: var(--correct);
+
+	animation-name: correctAnimation;
+	animation-duration: .3s;
+	animation-fill-mode: forwards;
+}
+
+@keyframes correctAnimation {
+	from {}
+	to {transform: translate(-50%, -50%) rotate3d(1, -1, 0, 90deg)}
+}
+
+.background {
+	position: absolute;
+	display: grid;
+	grid-template-columns: repeat(7, 1fr);
+	grid-template-rows: repeat(auto-fill, 1);
+	grid-auto-rows: max-content;
+	overflow: hidden;
+	border: none;
+	padding: none;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: -10;
+}
+
+.backgroundWord {
+	opacity: .4;
+	width: 100%;
+	aspect-ratio: 5;
+	display: grid;
+	grid-template-columns: repeat(5, 1fr);
+
+	animation-name: backgroundIn;
+	animation-duration: 2s;
+	animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+}
+
+.smallWordElement {
+	height: 75%;
+	aspect-ratio: 1;
+	margin-top: 50%;
+	margin-left: 50%;
+	transform: translate(-50%, -50%);
+	display: grid;
+	text-align: center;
+	align-content: center;
+	font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+	font-weight: bolder;
+	font-size: 1vw;
+	overflow: hidden;
+
+	border-width: .3vw;
+	border-style: solid;
+
+	color: var(--text);
+	border-color: var(--accent);
+	background-color: var(--accent2);
+}
+
+@keyframes backgroundIn {
+	from {transform: translate(0%, 1000%)}
+	to {}
+}
+
+.gameTimerContainer {
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	display: inline-grid;
+	position: absolute;
+	grid-template-rows: repeat(2, 1fr);
+	aspect-ratio: 5/2;
+	width: 30%;
+
+	animation-delay: 100ms;
+}
+
+.gameTimer {
+	background-color: var(--primary);
+	position: absolute;
+	display: grid;
+	width: 40%;
+	height: 25%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: -1;
+	grid-template-columns: repeat(4, 1fr);
+
+	text-align: center;
+	font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+	font-weight: bold;
+	font-size: 1.5vw;
+
+	color: var(--text);
+
+	animation-name: gameTimerIn;
+	animation-duration: 1.25s;
+	animation-delay: 1s;
+	animation-fill-mode: forwards;
+	animation-timing-function: cubic-bezier(.18, 1.57, .72, 1.15);
+}
+
+@keyframes gameTimerIn {
+	from {}
+	to {transform: translate(-50%, -120%); top: 0%}
+}
+
+.gameTimerOut {
+	animation-name: gameTimerOut !important;
+	animation-duration: 1s !important;
+	animation-fill-mode: forwards !important;
+	animation-timing-function: cubic-bezier(.62, .03, 1, .52) !important;
+}
+
+@keyframes gameTimerOut {
+	from {transform: translate(-50%, -120%); top: 0%}
+	to {transform: translate(-50%, 175%); top: 50%}
+}
+
+.scoreContainer {
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+	display: block;
+	position: absolute;
+	aspect-ratio: 5/4;
+	width: 30%;
+}
+
+.scoreSection {
+	width: 50%;
+	height: 25%;
+	transform: translate(-50%, 0);
+	display: inline-grid;
+	position: absolute;
+	grid-template-columns: repeat(5, 1fr);
+	grid-template-rows: repeat(2, 1fr);
+	align-content: center;
+	background-color: var(--primary);
+}
+
+.scoreIn {
+	animation-name: scoreIn;
+	animation-duration: 1s;
+	animation-fill-mode: forwards;
+	animation-timing-function: cubic-bezier(0.075, 0.82, 0.165, 1);
+	transform: translate(-50%, -100%) rotate3d(1, 0, 0, 90deg)
+}
+
+@keyframes scoreIn {
+	from {}
+	to {transform: translate(-50%, -50%)}
+}

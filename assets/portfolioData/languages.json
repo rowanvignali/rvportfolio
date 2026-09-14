@@ -11,10 +11,6 @@
 		65,
 		"https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original"
 	],
-	"GLSL": [
-		60,
-		"https://upload.wikimedia.org/wikipedia/commons/e/e9/Opengl-logo.svg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"
-	],
 	"HTML": [
 		100,
 		"https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/3840px-HTML5_logo_and_wordmark.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
@@ -34,6 +30,10 @@
 	"PY": [
 		50,
 		"https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1280px-Python-logo-notext.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+	],
+	"R": [
+		75,
+		"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/R_logo.svg/1280px-R_logo.svg.png?utm_source=meta.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
 	],
 	"SQL": [
 		55,

@@ -482,3 +482,20 @@ padding {
 #topHeader {
 	margin-top: 0px !important;
 }
+
+error {
+	font-size: xx-large;
+	font-weight: bolder;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: flex !important;
+	position: absolute !important;
+	padding: 1%;
+	flex-direction: column;
+}
+
+errorSub {
+	font-size: medium;
+	position:relative;
+}

@@ -1,19 +1,23 @@
 <!DOCTYPE html>
 <head>
+	<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://upload.wikimedia.org https://thumb.wikimedia.org; connect-src 'self' https://api.github.com;">
+	<!-- Note: meta tag is only here so that I can test without pushing to the actual site -->
+	<link rel="icon" type="image/x-icon" href="/assets/image.png">
 	<link rel="stylesheet" href="/style.css">
 	<title>Rowan Vignali Portfolio</title>
+	<script src="/three.js"></script>
+	<script src="/showdown.js"></script>
+	<script src="/bg.js" type="module"></script>
+	<script src="/index.js" type="module"></script>
 </head>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.9.0/showdown.min.js"></script>
-<script src="/bg.js" type="module"></script>
 <div class="unscroll">
 	<div class="doc">
 		<div id="aboutSection">
-			<div class="clear white" style="--a-ratio: 1/2.6; height: 100%; aspect-ratio: var(--a-ratio);">
-				<button id="name" class="clear black" style="font-size: x-large; width: 100%; height: 10%; font-weight: bold; --intensity: 10;; --click-color-intensity: 1.2; position: absolute;">Rowan Vignali</button>
-				<img src="assets/image.png" style="border-radius: 1rem; width: 96%; height: calc(96% * var(--a-ratio)); top: calc(2% * var(--a-ratio)); left: 2%; position: absolute; z-index: -2;">
-				<div class="clear black" style="text-align:center; padding: 10px; box-sizing: border-box; width: 95%; height: calc(98% * (1 - var(--a-ratio))); bottom: calc(2.5% * var(--a-ratio)); left: 2.5%; position: absolute;">
-					<aboutHeader style="margin-top: 0px;">The Ohio State University</aboutHeader>
+			<div class="clear white aboutSection">
+				<button id="name" class="clear black">Rowan Vignali</button>
+				<img id="portrait" src="assets/image.png">
+				<div class="clear black" id="about">
+					<aboutHeader id="topHeader">The Ohio State University</aboutHeader>
 					<about>2026-2029</about>
 					<aboutHeader>Programs</aboutHeader>
 					<about>Computer Science (Major)</about>
@@ -26,259 +30,27 @@
 		</div>
 		<padding></padding>
 		<div id="projectsSection">
-			<div class="clear white" style="height: 100%; aspect-ratio: 1.5; display: flex; flex-direction: row; flex-wrap: wrap;" id="projects"></div>
+			<div class="clear white" id="projects"></div>
 		</div>
 		<padding></padding>
 		<div id="experienceSection">
-			<div class="clear white" style="height: 100%; aspect-ratio: 1.5; display: flex; flex-direction: row; flex-wrap: wrap;" id="projects"></div>
+			<div class="clear white" id="experience">
+				<div class="clear black" id="languages"></div>
+			</div>
 		</div>
 	</div>
-	<button id="bottomBar" class="clear black" style="height:50%; width: 200%; bottom: 0; left: 50%; translate: -50% 92%; position: fixed; --intensity: 10; z-index: 1;">
-		<div id = "bottomBarDisplay" style="height: 10%; width: 100%; top: 0%; position: absolute; transition: rotate 0.5s; font-size: x-large;">^</div>
-		<div style="height: 10%; width: 50%; left: 25%; top: 10%; position: absolute; font-size:medium; display: flex;">
-			<span style="width: 100%">Website made with JavaScript and HTML by Rowan Vignali</span>
-			<span style="width: 10%">|</span>
-			<span style="width: 100%">Readme formatting using <a href="https://github.com/showdownjs/showdown">showdown</a></span>
-			<span style="width: 10%">|</span>
-			<span style="width: 100%">Background made using <a href="https://threejs.org/">Three.js</a></span>
+	<button id="bottomBar" class="clear black">
+		<div id="bottomBarDisplay">^</div>
+		<div id="bottomBarDiv">
+			<span class="bottomBarSpan">Website made with JavaScript and HTML by Rowan Vignali</span>
+			<span class="bottomBarDivider">|</span>
+			<span class="bottomBarSpan">Readme formatting using <a href="https://github.com/showdownjs/showdown">showdown</a></span>
+			<span class="bottomBarDivider">|</span>
+			<span class="bottomBarSpan">Background made using <a href="https://threejs.org/">Three.js</a></span>
 		</div>
 	</button>
-	<div id="topBar" class="clear black" style="height: 10%; width: 200%; top: 0; left: 50%; translate: -50% -50%; position: fixed; --intensity: 16; z-index: -1;">
-		<div id="labels" style="bottom: 0%; width: 50%; left:25%; position: fixed;"></div>
+	<div id="topBar" class="clear black">
+		<div id="labels"></div>
 	</div>
 	</div>
 </div>
-<script type="module">
-	import {request, saveRequest, clamp} from "/static.js"
-
-	const sections = {
-		About: document.getElementById("aboutSection"),
-		Projects: document.getElementById("projectsSection"),
-		Experience: document.getElementById("experienceSection")
-	}
-
-	// Top Bar
-	const tBar = document.getElementById("topBar")
-	const labels = document.getElementById("labels")
-	var sectionList = []
-	for (let [name, section] of Object.entries(sections)) {
-		let instance = document.createElement("label")
-		instance.className = "clear white"
-		instance.innerText = name
-		instance.style.left = `${section.getBoundingClientRect().left}px`
-
-		labels.append(instance)
-
-		updateSize(instance)
-
-		sectionList.push([instance, section])
-	}
-
-	// Layout Functionality
-	const doc = document.querySelector(".doc")
-	var divPos = 0
-	var scrollIndex = 0
-	var scrollStart = 0
-
-	function animateTopBar(initialIndex) {
-		sectionList.forEach((data) => {
-			let rect = data[1].getBoundingClientRect()
-
-			if (rect.right > 0 && rect.left < 0) {
-				data[0].style.left = 0
-			} else {
-				data[0].style.left = `${rect.left}px`
-			}
-		})
-
-		if (scrollIndex == initialIndex && Date.now() - scrollStart <= 500) {
-			requestAnimationFrame(() => {
-				animateTopBar(initialIndex)
-			})
-		}
-	}
-	
-	document.addEventListener("wheel", (event) => {
-		if (!event.deltaY) {
-			return
-		}
-
-		divPos = Math.min(Math.max(divPos - (event.deltaY + event.deltaX), window.innerWidth - doc.scrollWidth), 0)
-		doc.style.translate = `${divPos}px`
-		event.preventDefault()
-
-		scrollIndex++
-		scrollStart = Date.now()
-		animateTopBar(scrollIndex)
-	})
-
-	function updateSize(instance) {
-		let style = window.getComputedStyle(instance)
-
-		instance.style.setProperty("--xScale", 1 / parseInt(style.width))
-		instance.style.setProperty("--yScale", 1 / parseInt(style.height))
-	}
-
-	// Style Functionality
-	function sizeChanged() {
-		document.querySelectorAll(".clear").forEach(instance => {
-			updateSize(instance)
-			animateTopBar()
-		})
-	}
-
-	sizeChanged()
-
-	window.addEventListener("resize", () => {
-		sizeChanged()
-	})
-
-	// Projects
-	const projects = document.getElementById("projects")
-	request("https://api.github.com/users/rowanvignali/repos", "repos").then(data => {
-		var repoData = []
-
-		for (let index = 0; index < data.length; index++) {
-			repoData.push({
-				name: data[index].name
-			})
-		}
-
-		saveRequest("repos", repoData)
-
-		var readmeConverter = new showdown.Converter()
-
-		data.forEach(async projectData => {
-			let div = document.createElement("div")
-			div.className = "clear white project13"
-
-			let gitButton = document.createElement("button")
-			gitButton.className = "clear black projectButton"
-
-			gitButton.addEventListener("mousedown", (event) => {
-				window.open("https://github.com/rowanvignali/" + projectData.name, "_blank")
-			})
-
-			let gitName = document.createElement("div")
-			gitName.className = "clear black projectName"
-			gitName.innerText = "rowanvignali/" + projectData.name
-
-			let gitLogo = document.createElement("img")
-			gitLogo.style.width = "100%"
-			gitLogo.style.height = "100%"
-			gitLogo.src = "assets/githubInvertocatLogo.svg"
-			gitLogo.draggable = false
-
-			gitButton.append(gitLogo)
-
-			let readme = document.createElement("div")
-			readme.className = "clear black projectReadme"
-			readme.style.overflowX = "hidden"
-			readme.style.overflowY = "scroll"
-
-			readme.addEventListener("wheel", (event) => {
-				if (readme.scrollHeight > readme.clientHeight) {
-					event.stopImmediatePropagation()
-				}
-			})
-
-			let readmePre = document.createElement("span")
-			readmePre.style.margin = 0
-
-			readme.append(readmePre)
-
-			let commits = document.createElement("div")
-			commits.className = "clear black projectCommits"
-
-			let commitList = []
-
-			for (let index = 0; index < 10; index++) {
-				let ci = document.createElement("commitInstance")
-				ci.className = "clear black"
-
-				commitList.push(ci)
-				commits.append(ci)
-			}
-			
-			try {
-				const readmeData = await request(`https://api.github.com/repos/rowanvignali/${projectData.name}/readme`, `${projectData.name}_readme`)
-				readmePre.innerHTML = readmeConverter.makeHtml(atob(readmeData.content))
-
-				saveRequest(`${projectData.name}_readme`, {content: readmeData.content})
-			} catch {
-				readmePre.innerHTML = "<h5>Error loading readme</h5>"
-			}
-
-			try {
-				const commitData = await request(`https://api.github.com/repos/rowanvignali/${projectData.name}/commits?per_page=10`)
-				
-				let index = 0
-				commitData.forEach(commit => {
-					commitList[index].className += " filled"
-
-					let hour = parseInt(commit.commit.author.date.substring(11, 13))
-					let time = String(hour % 12) + commit.commit.author.date.substring(13, 16)
-					let affix = " AM"
-
-					if (hour > 12) {
-						affix = " PM"
-					}
-
-					let hover = document.createElement("div")
-					hover.className = "clear black commitHover"
-					hover.innerHTML = `<date>[ ${commit.commit.author.date.substring(0, 10)} at ${time + affix} ]</date><br>${commit.commit.message}`
-
-					commitList[index].append(hover)
-					
-					index++
-				})
-			} catch {
-				console.log("Error loading commits: Rate limited")
-			}
-
-			let popInAnimation = document.createElement("div")
-			popInAnimation.className = "popIn"
-
-			div.append(gitButton, gitName, commits, readme, popInAnimation)
-
-			projects.append(div)
-
-			updateSize(div)
-			updateSize(gitButton)
-		})
-	})
-
-	// Bottom Bar
-	const bBar = document.getElementById("bottomBar")
-	const bBarDisplay = document.getElementById("bottomBarDisplay")
-	var bBarOpen = false
-	var bBarClicks = 0
-	bBar.addEventListener("mousedown", (event) => {
-		if (event.target.tagName.toLowerCase() != "a") {
-			if (bBarOpen == true) {
-				bBar.style.translate = "-50% 92%"
-			} else {
-				bBar.style.translate = "-50% 80%"
-			}
-
-			bBarOpen = !bBarOpen
-			bBarClicks++
-			
-			bBarDisplay.style.rotate = `${bBarClicks * 180}deg`
-		}
-	})
-
-	// Name Phrases
-	const name = document.getElementById("name")
-	request("assets/namePhrases.json").then((data) => {
-		let index = 0
-		const phrases = data.phrases
-		
-		name.innerHTML = `Rowan Vignali<br><small>${phrases[index++]}</small>`
-
-		name.addEventListener("mousedown", (event) => {
-			name.innerHTML = `Rowan Vignali<br><small>${phrases[index++]}</small>`
-			index %= phrases.length
-		})
-	})
-</script>

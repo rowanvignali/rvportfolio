@@ -416,7 +416,7 @@ bBar.addEventListener("mousedown", (event) => {
 })
 
 // Name Phrases
-import phrases from "/assets/portfolioData/namePhrases.json" with {type: "json"}
+// import phrases from "/assets/portfolioData/namePhrases.json" with {type: "json"}
 
 // const name = document.getElementById("name")
 // let index = 0

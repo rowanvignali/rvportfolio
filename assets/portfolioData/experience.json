@@ -1,0 +1,34 @@
+[
+	{
+		"title": "Teaching Assistant",
+		"employer": "The Ohio State University",
+		"duration": "May 2026 - August 2026",
+		"description": [
+			"Acted as a teaching assistant for OSU's <t>Computer Science & Engineering: Software II</t> class",
+			"Assessed students’ homework and project submissions, providing feedback to help reinforce programming concepts",
+			"Led academic support sessions and sat in on labs to help students work through technical problems",
+			"Supported and aided students' learning during class labs through hands-on guidance and troubleshooting",
+			"Worked with the professor to support both lab activities and student learning"
+		]
+	},
+	{
+		"title": "Game Developer: <t>Overcooked</t> Remake",
+		"employer": "Commission",
+		"duration": "March 2024 - June 2024",
+		"description": [
+			"Developed a commissioned recreation of the game <t>Overcooked</t> on Roblox, from scoping and design to product delivery",
+			"Collaborated with the client to determine and refine the requirements for the project's scope",
+			"Leveraged an iterative approach with recurring product demos, client reviews, and continuous development"
+		]
+	},
+	{
+		"title": "Game Developer: <t>Critical Strike</t>",
+		"employer": "Freelance",
+		"duration": "August 2022 - January 2023",
+		"description": [
+			"Developed a fighting game on <t>Roblox</t> alongside a team of other programmers",
+			"Collaborated with other developers to refactor the existing character framework and improve gameplay",
+			"Created a variety of new game features and improved the existing codebase, resulting in a more feature-rich and stable game"
+		]
+	}
+]

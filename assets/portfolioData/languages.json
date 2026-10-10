@@ -1,42 +1,37 @@
 {
-	"C": [
-		65,
-		"https://upload.wikimedia.org/wikipedia/commons/1/19/C_Logo.png?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=thumbnail_unscaled"
-	],
-	"CSS": [
-		80,
-		"https://upload.wikimedia.org/wikipedia/commons/a/ab/Official_CSS_Logo.svg?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"
-	],
-	"C++": [
-		65,
-		"https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original"
-	],
-	"HTML": [
-		100,
-		"https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/HTML5_logo_and_wordmark.svg/3840px-HTML5_logo_and_wordmark.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
-	],
 	"JAVA": [
-		70,
-		"https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original"
-	],
-	"JS": [
-		90,
-		"https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=original"
-	],
-	"LUA": [
-		100,
-		"https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Lua-Logo.svg/1280px-Lua-Logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+		80,
+		"https://upload.wikimedia.org/wikipedia/en/3/30/Java_programming_language_logo.svg",
+		"<b>Java</b>: Supported students during labs and graded assignments as a Teaching Assistant for Software 2 in the College of Engineering. Three years of academic experience spanning multiple levels of coursework and study."
 	],
 	"PY": [
-		50,
-		"https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1280px-Python-logo-notext.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+		60,
+		"https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Python-logo-notext.svg/1280px-Python-logo-notext.svg.png",
+		"<b>Python</b>: Over five years of Python experience, including developing automation scripts for email and class material organization, a fractal generator, and a 3D renderer."
 	],
-	"R": [
+	"C": [
 		75,
-		"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/R_logo.svg/1280px-R_logo.svg.png?utm_source=meta.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+		"https://upload.wikimedia.org/wikipedia/commons/1/19/C_Logo.png",
+		"<b>C</b>: Worked with C through OSU's College of Engineering Linux server, using GDB to debug and GNOME Editor to edit code. Additionally developed programs on Windows with VSCode."
 	],
 	"SQL": [
 		55,
-		"https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Microsoft_SQL_Server_2025_icon.svg/960px-Microsoft_SQL_Server_2025_icon.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+		"https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Microsoft_SQL_Server_2025_icon.svg/960px-Microsoft_SQL_Server_2025_icon.svg.png",
+		"<b>SQL</b>: Gained hands-on experience with SQL Server and database design and development through a dual enrollment course."
+	],
+	"JS": [
+		95,
+		"https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png",
+		"<b>JavaScript</b>: Created game demos and a Japanese language lookup program (both shown in projects) throughout high school and college."
+	],
+	"MATLAB": [
+		85,
+		"https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png",
+		"<b>MATLAB</b>: Experience using MATLAB to create basic programs and a functional game, which was selected for the Engineering Design Showcase."
+	],
+	"LUA": [
+		100,
+		"https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cf/Lua-Logo.svg/1280px-Lua-Logo.svg.png",
+		"<b>Lua</b>: Used Luau to develop games on Roblox for 6 years, most notably a scripting language made to allow players to create their own in-game classes (see projects)."
 	]
 }

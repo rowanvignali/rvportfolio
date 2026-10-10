@@ -25,3 +25,39 @@ export function saveRequest(alias, data) {
 export function clamp(x, min, max) {
 	return Math.max(Math.min(x, max), min)
 }
+
+export function closeEnoughRound(arr, decimals) {
+	let total = 0
+	let totalPercent = 0
+	let decimalMul = Math.pow(10, decimals)
+	let final = {}
+	let error = {}
+
+	for (let value of Object.values(arr)) {
+		total += value
+	}
+
+	for (let [index, value] of Object.entries(arr)) {
+		final[index] = Math.round(value / total * 100 * decimalMul) / decimalMul
+		totalPercent += final[index] * decimalMul
+		error[index] = final[index] - (value / total) * 100
+	}
+
+	let diff = totalPercent - 100 * decimalMul
+
+	if (diff > 0) {
+		let sorted = Object.entries(error).sort((a, b) => {return a[1] < b[1]})
+
+		for (let loop = 0; loop < diff; loop++) {
+			final[sorted.pop()[0]] -= 1 / decimalMul
+		}
+	} else if (diff < 0) {
+		let sorted = Object.entries(error).sort((a, b) => {return a[1] > b[1]})
+		
+		for (let loop = 0; loop < -diff; loop++) {
+			final[sorted.pop()[0]] += 1 / decimalMul
+		}
+	}
+
+	return final
+}
